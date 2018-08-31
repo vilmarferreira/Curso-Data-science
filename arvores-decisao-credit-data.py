@@ -18,8 +18,8 @@ previsores = scaler.fit_transform(previsores)
 from sklearn.cross_validation import train_test_split
 previsores_treinamento, previsores_teste, classe_treinamento, classe_teste = train_test_split(previsores, classe, test_size=0.25, random_state=0)
 
-# importação da biblioteca
-# criação do classificador
+from sklearn.tree import DecisionTreeClassifier
+classificador = DecisionTreeClassifier(criterion='entropy', random_state=0)
 classificador.fit(previsores_treinamento, classe_treinamento)
 previsoes = classificador.predict(previsores_teste)
 
