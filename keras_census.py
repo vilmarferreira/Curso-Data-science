@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jan 23 11:15:46 2019
+Created on Wed Jan 23 14:42:37 2019
 
 @author: vilmarferreira
 """
@@ -34,17 +34,26 @@ from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
 previsores = scaler.fit_transform(previsores)
 
-from sklearn.model_selection import train_test_split
+from sklearn.cross_validation import train_test_split
 previsores_treinamento, previsores_teste, classe_treinamento, classe_teste = train_test_split(previsores, classe, test_size=0.15, random_state=0)
 
 # importação da biblioteca
-
-from sklearn.neural_network import MLPClassifier
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
 # criação do classificador
-classificador = MLPClassifier(verbose= True, max_iter=1000, tol=0.0000010)
+classificador = Sequential()
 
+##configuração da rede neural
+classificador.add(Dense(units=55, activation='relu', input_dim=108))
 
-classificador.fit(previsores_treinamento, classe_treinamento)
+classificador.add(Dense(units=55, activation='relu'))
+
+classificador.add(Dense(units=1, activation='sigmoid'))
+##compilar a rede neural
+classificador.compile(optimizer='adam', loss = 'binary_crossentropy', metrics=['accuracy'])
+
+classificador.fit(previsores_treinamento, classe_treinamento, batch_size=10, nb_epoch=100)
 previsoes = classificador.predict(previsores_teste)
 
 from sklearn.metrics import confusion_matrix, accuracy_score
